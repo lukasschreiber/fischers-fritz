@@ -6,7 +6,7 @@ export default {
   ],
   theme: {
     screens: {
-      md: "850px",
+      md: "1050px",
     },
     fontFamily: {
       sans: ['Century Gothic', 'ui-sans-serif', 'system-ui', 'sans-serif']

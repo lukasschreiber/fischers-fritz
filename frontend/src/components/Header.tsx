@@ -29,8 +29,7 @@ export function Header() {
   ];
   return (
     <nav className="bg-white shadow-md sticky top-0 overflow-hidden">
-      <div className="container md:mx-auto mx-3">
-        <div className="flex justify-between items-center py-4">
+      <div className="container md:px-20 px-3 flex justify-between items-center py-4 min-w-full">
           <div className="flex-shrink-0">
             <a
               href=""
@@ -51,7 +50,6 @@ export function Header() {
               </a>
             ))}
           </div>
-        </div>
       </div>
     </nav>
   );
