@@ -1,11 +1,12 @@
 {
-  "name": "fischers-fritz",
+  "name": "@fischers-fritz/types",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "types"
   ],
   "scripts": {
-    "dev":  "concurrently --kill-others \"npm run dev -w frontend\" \"npm run dev -w backend\""
+    "dev":  "npm run dev -w types && concurrently --kill-others \"npm run dev -w frontend\" \"npm run dev -w backend\""
   },
   "devDependencies": {
     "concurrently": "^8.2.1"

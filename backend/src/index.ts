@@ -8,7 +8,8 @@ const app = express();
 const port = 3000;
 app.use(cors());
 
-// Define a route to proxy the Google Places API request
+const reviews = []
+
 app.get('/reviews', async (req, res) => {
   try {
     const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${process.env.GOOGLE_PLACE_ID}&fields=reviews&key=${process.env.GOOGLE_API_KEY}&language=de`;

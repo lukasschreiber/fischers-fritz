@@ -1,5 +1,5 @@
 import { Banner } from "./components/Banner";
-import { ContentSection } from "./components/ContentSection";
+import { SideBySide } from "./components/SideBySide";
 import { Header } from "./components/Header";
 import { MainStage } from "./components/MainStage";
 // import { Reviews } from "./components/Reviews";
@@ -11,14 +11,14 @@ function App() {
       <MainStage />
       <Banner />
       {/* <Reviews /> */}
-      <ContentSection>
-        <ContentSection.Left>
+      <SideBySide>
+        <SideBySide.Section>
           Test
-        </ContentSection.Left>
-        <ContentSection.Left>
+        </SideBySide.Section>
+        <SideBySide.Section>
           Right
-        </ContentSection.Left>
-      </ContentSection>
+        </SideBySide.Section>
+      </SideBySide>
     </>
   );
 }
