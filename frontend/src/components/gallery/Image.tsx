@@ -10,7 +10,7 @@ export function Image(props: {
 
   useEffect(() => {
     addImage({ src: props.src, title: props.title });
-  }, []);
+  }, [props.src, props.title]);
 
   return (
     <img src={props.src} alt={props.title} className={props.className || ""} onClick={() => setState({open: true, slide: props.src})} />

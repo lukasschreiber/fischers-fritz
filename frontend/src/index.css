@@ -6,7 +6,7 @@ body:has(.gallery:not(.hidden)) {
     overflow: hidden;
 }
 
-.swiper {
+.gallery .swiper {
     height: 100vh;
 }
 
