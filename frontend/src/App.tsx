@@ -2,7 +2,7 @@ import { Banner } from "./components/Banner";
 import { SideBySide } from "./components/SideBySide";
 import { Header } from "./components/Header";
 import { MainStage } from "./components/MainStage";
-// import { Reviews } from "./components/Reviews";
+import { Reviews } from "./components/Reviews";
 
 function App() {
   return (
@@ -19,6 +19,7 @@ function App() {
           Right
         </SideBySide.Section>
       </SideBySide>
+      <Reviews />
     </>
   );
 }

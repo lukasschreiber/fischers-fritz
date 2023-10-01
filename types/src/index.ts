@@ -7,6 +7,12 @@ export interface Review {
     text: string
 } 
 
-export interface ReviewRequestType {
+export interface ReviewResponseType {
     result: Review[];
+}
+
+export interface GoogleReviewResponseType {
+    result: {
+        reviews: Review[]
+    };
 }
