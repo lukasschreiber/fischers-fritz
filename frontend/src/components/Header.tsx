@@ -28,8 +28,8 @@ export function Header() {
     },
   ];
   return (
-    <nav className="bg-white shadow-md sticky top-0 overflow-hidden z-50">
-      <div className="container md:px-20 px-3 flex justify-between items-center py-4 min-w-full">
+    <nav className="bg-white shadow-md sticky top-0 overflow-hidden z-50 flex justify-center">
+      <div className="container max-w-full md:max-w-6xl px-3 flex justify-between items-center py-4">
           <div className="flex-shrink-0">
             <a
               href=""
