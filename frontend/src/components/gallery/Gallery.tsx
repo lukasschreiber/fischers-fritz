@@ -84,7 +84,6 @@ export function Gallery() {
         spaceBetween={0}
         slidesPerView={1}
         navigation
-        pagination={{ clickable: true }}
         onInit={(swiper) => setSwiper(swiper)}
       >
         {images.map((image, index) => (
