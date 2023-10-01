@@ -5,6 +5,8 @@ import { List } from "./components/List";
 import { MainStage } from "./components/MainStage";
 import { Reviews } from "./components/Reviews";
 import { Title } from "./components/Title";
+import { Gallery } from "./components/gallery/Gallery";
+import { Image } from "./components/gallery/Image";
 
 function App() {
   return (
@@ -14,12 +16,12 @@ function App() {
       <Banner />
       <Container>
         <Container.Section>
-          <img className="p-5 shadow-lg" src="about_img.jpg" />
+          <Image className="p-5 shadow-lg" src="about_img.jpg" title="Außenansicht" />
         </Container.Section>
         <Container.Section>
           <Title text="Über das Haus" />
           <p className="my-5 text-neutral-500 text-sm">
-            Das 2020 erbaute, hochwertig eingerichtete Friesenhaus „Fischers
+            Das hochwertig eingerichtete Friesenhaus „Fischers
             Fritz“ bietet auf knapp 100 qm Platz für bis zu 6 Personen. Es
             eignet sich gleichermaßen für einen Urlaub mit Freunden wie für
             einen Urlaub mit der Großfamilie. Das Ferienhaus liegt in einem
@@ -56,6 +58,7 @@ function App() {
         </Container.Section>
       </Container>
       <Reviews />
+      <Gallery />
     </>
   );
 }

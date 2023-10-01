@@ -16,3 +16,8 @@ export interface GoogleReviewResponseType {
         reviews: Review[]
     };
 }
+
+export interface Image {
+    src: string,
+    title: string
+}

@@ -28,7 +28,7 @@ export function Header() {
     },
   ];
   return (
-    <nav className="bg-white shadow-md sticky top-0 overflow-hidden z-50 flex justify-center">
+    <nav className="bg-white shadow-md sticky top-0 overflow-hidden z-40 flex justify-center">
       <div className="container max-w-full md:max-w-6xl px-3 flex justify-between items-center py-4">
           <div className="flex-shrink-0">
             <a
