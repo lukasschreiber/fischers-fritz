@@ -10,6 +10,11 @@ body:has(.gallery:not(.hidden)) {
     height: 100vh;
 }
 
+.reviews .swiper {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 2% 98%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0%, black 2% 98%, transparent 100%);
+}
+
 .swiper-button-next,
 .swiper-button-prev {
     right: 10px;

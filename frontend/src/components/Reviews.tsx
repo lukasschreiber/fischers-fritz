@@ -18,11 +18,20 @@ export function Reviews() {
   }, []);
 
   return (
-    <div>
-      <a href={import.meta.env.VITE_GOOGLE_REVIEW_LINK} target="_blank">Jetzt bewerten</a>
-      {reviews.length} Reviews, Mean: {reviews.reduce((p, c) => p + c.rating, 0)/reviews.length}
+    <div className="reviews">
+      <a href={import.meta.env.VITE_GOOGLE_REVIEW_LINK} target="_blank">
+        Jetzt bewerten
+      </a>
+      {reviews.length} Reviews, Mean:{" "}
+      {reviews.reduce((p, c) => p + c.rating, 0) / reviews.length}
       <div>
-        {[5, 4, 3, 2, 1].map(rating => <div key={rating}>{rating}: {reviews.filter(review => review.rating === rating).length} Reviews</div>)}
+        {[5, 4, 3, 2, 1].map((rating) => (
+          <div key={rating}>
+            {rating}:{" "}
+            {reviews.filter((review) => review.rating === rating).length}{" "}
+            Reviews
+          </div>
+        ))}
       </div>
       <div className="w-full h-fit">
         <Swiper
@@ -30,10 +39,9 @@ export function Reviews() {
           slidesPerView={3}
           spaceBetween={30}
           pagination={{ clickable: true }}
-          className="h-fit!"
         >
           {reviews.map((review, index) => (
-            <SwiperSlide key={index} className="h-fit">
+            <SwiperSlide key={index}>
               <ReviewCard review={review} />
             </SwiperSlide>
           ))}
@@ -53,7 +61,12 @@ function ReviewCard(props: { review: Review }) {
       <br />
       {props.review.rating}
       <br />
-      {new Date(props.review.time * 1000).toLocaleDateString("de-DE", {month: "long", year: "numeric", day:"2-digit"})} on {props.review.source}
+      {new Date(props.review.time * 1000).toLocaleDateString("de-DE", {
+        month: "long",
+        year: "numeric",
+        day: "2-digit",
+      })}{" "}
+      on {props.review.source}
       <br />
       <b>{props.review.title}</b>
       <br />

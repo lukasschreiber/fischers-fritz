@@ -9,6 +9,7 @@ import {
   ReviewDetail,
   ReviewResponseType,
 } from "@fischers-fritz/types";
+import { getKeywords } from "./python/keywords";
 
 dotenv.config();
 const app = express();
@@ -128,6 +129,8 @@ app.get("/reviews", async (req, res) => {
         if(b.rating === a.rating) return b.text.length - a.text.length;
         return b.rating - a.rating
       }));
+
+      getKeywords(reviews[0])
     }
 
     res.json({ result: reviews } as ReviewResponseType);
