@@ -8,6 +8,12 @@ export interface GoogleReview {
     time: number
 } 
 
+export interface Keyword {
+    n: number;
+    text: string;
+    bounds: [number, number];
+  }
+
 export interface Review {
     time: number,
     relativeTimeDescription: string,
@@ -16,7 +22,8 @@ export interface Review {
     title?: string,
     text: string,
     authorName: string,
-    details?: ReviewDetail[]
+    details?: ReviewDetail[],
+    keywords: Keyword[],
     source: "google" | "greetsiel-apartments"
 }
 

@@ -1,5 +1,4 @@
 import math
-
 import spacy
 import yake
 from spacy.tokens import Doc, Span
@@ -120,26 +119,34 @@ def remove_forbidden_words(doc: Doc, keywords: list[Keyword]) -> list[Keyword]:
 def expand_keywords(doc: Doc, keywords: list[Keyword]) -> list[Keyword]:
     expanded_keywords = []
     for keyword, weight in keywords:
-        next_token = doc[keyword[-1].i + 1]
-        previous_token = doc[keyword[0].i - 1]
+        start_token = doc[keyword[0].i] if keyword[0].i >= 0 else None
+        end_token = doc[keyword[-1].i] if keyword[-1].i < len(doc) else None
+
+        if start_token is None or end_token is None:
+            expanded_keywords.append((keyword, weight))
+            continue
+
+        next_token = doc[end_token.i + 1] if end_token.i + 1 < len(doc) else None
+        previous_token = doc[start_token.i - 1] if start_token.i > 0 else None
 
         # if the last token is an adjective, we want to include any potentially following Noun
-        if keyword[-1].pos_ == "ADJ" and next_token.pos_ == "NOUN":
+        if end_token.pos_ == "ADJ" and next_token and next_token.pos_ == "NOUN":
             keyword = doc.char_span(keyword.start_char, next_token.idx + len(next_token))
 
         # if the first token is a noun, we want to include any potential previous adjectives
-        if keyword[0].pos_ == "NOUN" and previous_token.pos_ == "ADJ":
+        if start_token.pos_ == "NOUN" and previous_token and previous_token.pos_ == "ADJ":
             keyword = doc.char_span(previous_token.idx, keyword.end_char)
 
         # if there is a token within the 3 next tokens that has the dep tag svp and points to a token within the keyword
         # then we want to extend the keyword until this token
-        end_of_span = doc[keyword[-1].i + 3]
-        next_span = doc.char_span(keyword.end_char + 1, end_of_span.idx + len(end_of_span))
-        if next_span is not None:
-            for token in next_span:
-                if token.dep_ == "svp" and token.head.pos_ == "VERB" and keyword.start_char <= token.head.idx < keyword.end_char:
-                    keyword = doc.char_span(keyword.start_char, token.idx + len(token.text))
-                    break
+        end_of_span = doc[end_token.i + 3] if end_token.i + 3 < len(doc) else None
+        if end_of_span:
+            next_span = doc.char_span(keyword.end_char + 1, end_of_span.idx + len(end_of_span))
+            if next_span is not None:
+                for token in next_span:
+                    if token.dep_ == "svp" and token.head.pos_ == "VERB" and keyword.start_char <= token.head.idx < keyword.end_char:
+                        keyword = doc.char_span(keyword.start_char, token.idx + len(token.text))
+                        break
 
         expanded_keywords.append((keyword, weight))
 
