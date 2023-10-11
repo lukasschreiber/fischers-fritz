@@ -92,7 +92,7 @@ export function Gallery() {
             className="py-20 px-40 flex justify-center flex-col gap-4 items-center"
           >
             <img src={image.src} className="max-h-full" />
-            <div className="bg-white px-8 py-2 w-fit rounded-2xl">
+            <div className="bg-white px-8 py-2 w-fit rounded-2xl shadow-md">
               {image.title}
             </div>
           </SwiperSlide>

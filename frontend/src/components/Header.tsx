@@ -44,7 +44,7 @@ export function Header() {
               <a
                 key={link.target}
                 href={link.target}
-                className="text-fritz-teal-700 hover:text-fritz-teal-100 uppercase px-2 py-0.5 font-bold text-sm"
+                className="text-fritz-teal-700 hover:text-fritz-teal-300 uppercase px-2 py-0.5 font-bold text-sm"
               >
                 {link.label}
               </a>

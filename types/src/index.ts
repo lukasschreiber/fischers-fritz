@@ -32,6 +32,12 @@ export interface ReviewDetail {
     rating: number
 }
 
+export type SortOption = "rating_and_length_desc" | "date_desc";
+
+export interface ReviewRequest {
+    sort: SortOption
+}
+
 export interface ReviewResponseType {
     result: Review[];
 }

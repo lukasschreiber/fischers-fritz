@@ -14,7 +14,8 @@ export default {
     extend: {
       colors: {
         "fritz-teal": {
-          100: '#A5C7CB',
+          100: '#D0E2E4',
+          300: '#A5C7CB',
           500: '#5b979e',
           700: '#2f4550',
         }

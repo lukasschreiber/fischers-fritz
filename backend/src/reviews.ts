@@ -19,7 +19,7 @@ export async function getGoogleReviews(): Promise<Review[]> {
 
     const reviews = await Promise.all(
       data.result.reviews.map(async (review) => {
-        const text = review.text.replace(/\n/g, " ");
+        const text = review.text.replace(/\n/g, " ").replace("  ", " ");
         return {
           authorName: review.author_name,
           rating: review.rating,
@@ -63,30 +63,22 @@ export async function getFeWoReviews(): Promise<Review[]> {
       };
 
       const dom = new JSDOM(data.votings[0]);
-      const text =
-        dom.window.document
-          .querySelector(".fewo_voting_message")
-          ?.textContent?.replace(/^(\n+ *)|(\n+ *)$/gm, "")
-          .replace(/\n/g, " ") ?? "";
+      const getElement = (className: string, fallback: string = "") =>
+        dom.window.document.querySelector(`.${className}`)?.textContent ??
+        fallback;
+
+      const text = getElement("fewo_voting_message")
+        .replace(/^(\n+ *)|(\n+ *)$/gm, "")
+        .replace(/\n/g, " ").replace("  ", " ");
       const keywords = await getKeywords(text);
 
       results.push({
-        authorName:
-          dom.window.document.querySelector(".fewo_voting_author")
-            ?.textContent ?? "",
-        time: parseGermanDate(
-          dom.window.document.querySelector(".fewo_voting_date")?.textContent ??
-            "01.01.1970"
-        ),
-        rating: parseFloat(
-          dom.window.document.querySelector(".vote_number")?.textContent ??
-            "0.0"
-        ),
+        authorName: getElement("fewo_voting_author"),
+        time: parseGermanDate(getElement("fewo_voting_date", "01.01.1970")),
+        rating: parseFloat(getElement("vote_number", "0.0").replace(",", ".")),
         text: text,
         keywords: keywords,
-        title:
-          dom.window.document.querySelector(".fewo_voting_headline")
-            ?.textContent ?? undefined,
+        title: getElement("fewo_voting_headline"),
         relativeTimeDescription: "",
         profileImage: undefined,
         source: "greetsiel-apartments",
