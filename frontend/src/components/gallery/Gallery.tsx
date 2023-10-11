@@ -5,10 +5,10 @@ import { useGalleryContext } from "../../hooks/gallery";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { Swiper as SwiperType } from "swiper";
 import { Navigation } from "swiper/modules";
-import CloseIcon from "../../assets/close.svg?react";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import { Close } from "../../assets";
 
 export interface GalleryState {
   open: boolean;
@@ -77,7 +77,7 @@ export function Gallery() {
         className="text-black/60 w-8 h-8 absolute right-4 top-4 cursor-pointer z-50"
         onClick={() => setState({ open: false, slide: undefined })}
       >
-        <CloseIcon />
+        <Close />
       </div>
       <Swiper
         modules={[Navigation]}

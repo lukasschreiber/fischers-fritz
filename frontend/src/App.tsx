@@ -4,10 +4,11 @@ import { Grid } from "./components/Grid";
 import { Header } from "./components/Header";
 import { List } from "./components/List";
 import { MainStage } from "./components/MainStage";
-import { Reviews } from "./components/Reviews";
+import { Reviews } from "./components/reviews/Reviews";
 import { Title } from "./components/Title";
 import { Gallery } from "./components/gallery/Gallery";
 import { Image } from "./components/gallery/Image";
+import { GoogleLogo } from "./assets";
 
 function App() {
   return (
@@ -143,7 +144,11 @@ function App() {
       </Container>
       <Container className="bg-white">
         <Container.Section className="w-full">
-          <Title text="Bewertungen" />
+          <Title text="Bewertungen">
+            <a className="text-sm  shadow-md p-2 rounded-md flex gap-2 items-center border border-neutral-100" href={import.meta.env.VITE_GOOGLE_REVIEW_LINK} target="_blank">
+              Jetzt Bewerten <GoogleLogo className="w-4 h-4"/>
+            </a>
+          </Title>
           <Reviews />
         </Container.Section>
       </Container>
