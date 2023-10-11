@@ -6,6 +6,7 @@ export default {
   ],
   theme: {
     screens: {
+      sm: "450px",
       md: "1050px",
     },
     fontFamily: {

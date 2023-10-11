@@ -1,7 +1,6 @@
 import { Banner } from "./components/Banner";
 import { Container } from "./components/Container";
 import { Grid } from "./components/Grid";
-import { Header } from "./components/Header";
 import { List } from "./components/List";
 import { MainStage } from "./components/MainStage";
 import { Reviews } from "./components/reviews/Reviews";
@@ -9,14 +8,32 @@ import { Title } from "./components/Title";
 import { Gallery } from "./components/gallery/Gallery";
 import { Image } from "./components/gallery/Image";
 import { GoogleLogo } from "./assets";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function App() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash.replace("#", "") === "") return;
+    
+    const element = document.querySelector(
+      `[data-id=${hash.replace("#", "")}]`
+    );
+    if (element !== null) {
+      window.scrollTo({
+        top:
+          element.getBoundingClientRect().top -
+          document.body.getBoundingClientRect().top -
+          68, // the height of the header in px
+      });
+    }
+  }, [hash]);
   return (
     <>
-      <Header />
       <MainStage />
       <Banner />
-      <Container>
+      <Container data-id="about">
         <Container.Section>
           <Image
             className="p-5 shadow-lg bg-white"
@@ -25,7 +42,7 @@ function App() {
           />
         </Container.Section>
         <Container.Section>
-          <Title text="Über das Haus" />
+          <Title>Über das Haus</Title>
           <p className="my-5 text-neutral-500 text-sm">
             Das hochwertig eingerichtete Friesenhaus „Fischers Fritz“ bietet auf
             knapp 100 qm Platz für bis zu 6 Personen. Es eignet sich
@@ -42,7 +59,7 @@ function App() {
             kostenfrei genutzt werden. Bettwäsche sowie Handtücher für Bad und
             Küche sind optional buchbar.
           </p>
-          <Title text="Was wir Ihnen bieten:" style="h3" />
+          <Title style="h3">Was wir Ihnen bieten:</Title>
           <List>
             <List.Item>
               gemütlich eingerichtetes Nichtraucher-Haus für bis zu 6 Personen
@@ -62,9 +79,9 @@ function App() {
           </List>
         </Container.Section>
       </Container>
-      <Container className="bg-white">
+      <Container className="bg-white" data-id="services">
         <Container.Section>
-          <Title text="Impressionen" />
+          <Title>Impressionen</Title>
           <Grid>
             <Grid.Item imageSrc="/services/service-1.jpg" title="Badezimmer">
               Es gibt zwei vollwertig ausgestattete Badezimmer im OG und EG
@@ -117,7 +134,7 @@ function App() {
           </Grid>
         </Container.Section>
       </Container>
-      <Container>
+      <Container data-id="map">
         <Container.Section className="flex-grow-0">
           <iframe
             className="p-5 shadow-lg bg-white max-w-[100%] md:max-w-none"
@@ -127,13 +144,13 @@ function App() {
           ></iframe>
         </Container.Section>
         <Container.Section className="text-sm text-neutral-500 flex gap-4 flex-col">
-          <Title text="Anfahrt" style="h3" />
-          <Title text="Adresse" style="h4" />
+          <Title style="h3">Anfahrt</Title>
+          <Title style="h4">Adresse</Title>
           <p>
             Gabrand-Doolmann - Weg 3<br />
             Greetsiel, 26736 Krummhörn
           </p>
-          <Title text="Achtung!" style="h4" />
+          <Title style="h4">Achtung!</Title>
           <p>
             Da die Straße noch sehr neu ist, ist sie in den meisten
             Navigationsgeräten noch nicht zu finden. Im Navi können Sie einfach{" "}
@@ -142,11 +159,16 @@ function App() {
           </p>
         </Container.Section>
       </Container>
-      <Container className="bg-white">
+      <Container className="bg-white" data-id="testimonials">
         <Container.Section className="w-full">
-          <Title text="Bewertungen">
-            <a className="text-sm  shadow-md p-2 rounded-md flex gap-2 items-center border border-neutral-100" href={import.meta.env.VITE_GOOGLE_REVIEW_LINK} target="_blank">
-              Jetzt Bewerten <GoogleLogo className="w-4 h-4"/>
+          <Title>
+            Bewertungen
+            <a
+              className="text-sm  shadow-md p-2 rounded-md flex gap-2 items-center border border-neutral-100"
+              href={import.meta.env.VITE_GOOGLE_REVIEW_LINK}
+              target="_blank"
+            >
+              Jetzt Bewerten <GoogleLogo className="w-4 h-4" />
             </a>
           </Title>
           <Reviews />

@@ -19,7 +19,7 @@ export function MainStage() {
           Feriendomizil zu verbringen.
         </div>
         <a
-          href="#about"
+          href="/#about"
           className="uppercase bg-fritz-teal-500 w-fit text-white hover:bg-fritz-teal-700 font-semibold py-4 px-3 rounded-md text-sm transition"
         >
           Mehr Erfahren

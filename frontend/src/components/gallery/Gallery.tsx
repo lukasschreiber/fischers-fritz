@@ -1,5 +1,5 @@
 import { Image } from "@fischers-fritz/types";
-import { PropsWithChildren, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useGalleryContext } from "../../hooks/gallery";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -27,7 +27,7 @@ export const GalleryContext = createContext<{
   setState: () => {},
 });
 
-export function GalleryProvider(props: PropsWithChildren) {
+export function GalleryProvider(props: React.ComponentPropsWithoutRef<"div">) {
   const [images, setImages] = useState<Image[]>([]);
   const [state, setState] = useState<GalleryState>({
     open: false,

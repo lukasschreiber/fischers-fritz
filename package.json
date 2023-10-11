@@ -6,9 +6,12 @@
     "types"
   ],
   "scripts": {
-    "dev":  "concurrently --kill-others \"npm run dev -w frontend\" \"npm run dev -w backend\" \"npm run dev -w types\""
+    "dev": "concurrently --kill-others \"npm run dev -w frontend\" \"npm run dev -w backend\" \"npm run dev -w types\""
   },
   "devDependencies": {
     "concurrently": "^8.2.1"
+  },
+  "dependencies": {
+    "react-router-dom": "^6.16.0"
   }
 }
