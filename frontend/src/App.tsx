@@ -164,7 +164,7 @@ function App() {
           <Title>
             Bewertungen
             <a
-              className="text-sm  shadow-md p-2 rounded-md flex gap-2 items-center border border-neutral-100"
+              className="text-sm  shadow-md p-3 rounded-md flex gap-2 items-center border border-neutral-100"
               href={import.meta.env.VITE_GOOGLE_REVIEW_LINK}
               target="_blank"
             >
