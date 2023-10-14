@@ -14,17 +14,17 @@ function createPythonProcess() {
   }, 30 * 1000);
 }
 
-export function getKeywords(text: string): Promise<Keyword[]> {
+export async function getKeywords(text: string): Promise<Keyword[]> {
   const id = Math.floor(Math.random() * Date.now());
-  return new Promise<Keyword[]>((resolve, reject) => {
-    if (process === undefined) createPythonProcess();
+  return new Promise<Keyword[]>((resolve) => {
+    if (process === undefined || process.exitCode !== null) createPythonProcess();
     if (process === undefined) return;
     timeout.refresh();
 
     process.stdin.write(Buffer.from(id.toString() + EOL));
     process.stdin.write(Buffer.from(text + EOL, "latin1"));
 
-    process.stdout.on("data", (data) => {
+    const dataListener = (data: Buffer) => {
       try {
         const result = JSON.parse(data.toString());
         if(parseInt(result[0]) === id){
@@ -39,6 +39,10 @@ export function getKeywords(text: string): Promise<Keyword[]> {
       } catch (e) {
         resolve([]);
       }
-    });
+
+      process?.stdout.removeListener("data", dataListener);
+    }
+
+    process.stdout.on("data", dataListener);
   });
 }

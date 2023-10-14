@@ -1,7 +1,7 @@
-import { GoogleReviewResponseType, Review, ReviewDetail } from "@fischers-fritz/types";
+import { GoogleReviewResponseType, Keyword, Review, ReviewDetail } from "@fischers-fritz/types";
 import * as Cache from "./utils/cache";
 import { JSDOM } from "jsdom";
-import { parseGermanDate } from "./utils/utils";
+import { parseGermanDate, parseLongGermanDate } from "./utils/utils";
 import { getKeywords } from "./python/keywords";
 
 export async function getGoogleReviews(): Promise<Review[]> {
@@ -49,7 +49,9 @@ export async function getFeWoReviews(): Promise<Review[]> {
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
                 },
-            }).then((body) => body.json()).catch((e: unknown) => console.log(e))) as {
+            })
+                .then((body) => body.json())
+                .catch((e: unknown) => console.log(e))) as {
                 votings: string[];
                 more: boolean;
             };
@@ -62,7 +64,7 @@ export async function getFeWoReviews(): Promise<Review[]> {
                 .replace(/^(\n+ *)|(\n+ *)$/gm, "")
                 .replace(/\n/g, " ")
                 .replace("  ", " ");
-            const keywords = await getKeywords(text);
+            const keywords: Keyword[] = await getKeywords(text);
 
             results.push({
                 authorName: getElement("fewo_voting_author"),
@@ -83,7 +85,6 @@ export async function getFeWoReviews(): Promise<Review[]> {
                 ),
             });
 
-            console.log(data.more, index, getElement("fewo_voting_author"));
             if (!data.more) hasMore = false;
             index++;
         }
@@ -93,119 +94,139 @@ export async function getFeWoReviews(): Promise<Review[]> {
     });
 }
 
-// export async function getFeWoDirectReviews(): Promise<Review[]> {
-//     return new Promise<Review[]>(async (resolve) => {
-//         const cacheEntry = Cache.get<Review[]>("fewo-direct");
-//         if (cacheEntry !== undefined) return resolve(cacheEntry);
+export async function getFeWoDirectReviews(): Promise<Review[]> {
+    return new Promise<Review[]>(async (resolve) => {
+        const cacheEntry = Cache.get<Review[]>("fewo-direct");
+        if (cacheEntry !== undefined) return resolve(cacheEntry);
 
-//         const results: Review[] = [];
+        const data = (await fetch("https://www.fewo-direkt.de/graphql", {
+            method: "POST",
+            headers: {
+                "content-type": "application/json",
+                "client-info": "blossom-flex-ui,19501edf899ca02c6d68cfefa3beb18624c131e2,us-east-1",
+                "user-agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+                "x-page-id": "page.Hotels.Infosite.Information,H,30",
+            },
+            body: JSON.stringify([
+                {
+                    operationName: "PropertyFilteredReviewsQuery",
+                    variables: {
+                        context: {
+                            siteId: 9003020,
+                            locale: "de_DE",
+                            eapid: 20,
+                            currency: "EUR",
+                            device: {
+                                type: "DESKTOP",
+                            },
+                            identity: {
+                                duaid: "ad0bd7fc-b8b6-b111-0788-0dacba80b313",
+                                expUserId: "-1",
+                                tuid: "-1",
+                                authState: "ANONYMOUS",
+                            },
+                            privacyTrackingState: "CAN_NOT_TRACK",
+                            debugContext: {
+                                abacusOverrides: [],
+                                alterMode: "RELEASED",
+                            },
+                        },
+                        propertyId: "55562987",
+                        searchCriteria: {
+                            primary: {
+                                dateRange: null,
+                                rooms: [
+                                    {
+                                        adults: 2,
+                                    },
+                                ],
+                                destination: {
+                                    regionId: "6050610",
+                                },
+                            },
+                            secondary: {
+                                booleans: [
+                                    {
+                                        id: "includeRecentReviews",
+                                        value: true,
+                                    },
+                                    {
+                                        id: "includeRatingsOnlyReviews",
+                                        value: true,
+                                    },
+                                    {
+                                        id: "overrideEmbargoForIndividualReviews",
+                                        value: true,
+                                    },
+                                    {
+                                        id: "isFilteredSummary",
+                                        value: true,
+                                    },
+                                ],
+                                counts: [
+                                    {
+                                        id: "startIndex",
+                                        value: 0,
+                                    },
+                                    {
+                                        id: "size",
+                                        value: 100,
+                                    },
+                                ],
+                                selections: [
+                                    {
+                                        id: "sortBy",
+                                        value: "NEWEST_TO_OLDEST_BY_LANGUAGE",
+                                    },
+                                    {
+                                        id: "searchTerm",
+                                        value: "",
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    extensions: {
+                        persistedQuery: {
+                            version: 1,
+                            sha256Hash: "b6755caee5a1fc2bdb97929eb15a2fcff6c365711a3ed8cb11a75c97ec4338b5",
+                        },
+                    },
+                },
+            ]),
+        }).then((response) => response.json())) as {
+            data: {
+                propertyInfo: {
+                    reviewInfo: {
+                        reviews: {
+                            title: string;
+                            text: string;
+                            submissionTime: { longDateFormat: string };
+                            reviewAuthorAttribution: { text: string };
+                            reviewScoreWithDescription: { value: string };
+                        }[];
+                    };
+                };
+            };
+        }[];
 
-//         // myHeaders.append(
-//         //     "Cookie",
-//         //     "DUAID=3760ddc2-b9ae-5388-6eed-12a2f249994c; HMS=92cb560b-c850-42bb-8573-8ef2d5d7ad27; MC1=GUID=3760ddc2b9ae53886eed12a2f249994c; OIP=gdpr|-1; cesc=%7B%22marketingClick%22%3A%5B%22false%22%2C1697307627712%5D%2C%22hitNumber%22%3A%5B%221%22%2C1697307627712%5D%2C%22visitNumber%22%3A%5B%222%22%2C1697307627712%5D%2C%22entryPage%22%3A%5B%22page.Hotels.Infosite.Information%22%2C1697307627712%5D%7D; hav=3760ddc2-b9ae-5388-6eed-12a2f249994c; ha-device-id=3760ddc2-b9ae-5388-6eed-12a2f249994c; has=9fad7744-0a3c-77d4-cca5-a58a551fa52a; hav=3760ddc2-b9ae-5388-6eed-12a2f249994c"
-//         // );
+        const results: Review[] = [];
 
-//         const result = await fetch("https://www.fewo-direkt.de/graphql", {
-//             method: "POST",
-//             headers: {
-//                 "content-type": "application/json",
-//                 "client-info": "blossom-flex-ui,19501edf899ca02c6d68cfefa3beb18624c131e2,us-east-1",
-//                 "user-agent":
-//                     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
-//                 "x-page-id": "page.Hotels.Infosite.Information,H,30",
-//             },
-//             body: JSON.stringify([
-//                 {
-//                     operationName: "PropertyFilteredReviewsQuery",
-//                     variables: {
-//                         context: {
-//                             siteId: 9003020,
-//                             locale: "de_DE",
-//                             eapid: 20,
-//                             currency: "EUR",
-//                             device: {
-//                                 type: "DESKTOP",
-//                             },
-//                             identity: {
-//                                 duaid: "ad0bd7fc-b8b6-b111-0788-0dacba80b313",
-//                                 expUserId: "-1",
-//                                 tuid: "-1",
-//                                 authState: "ANONYMOUS",
-//                             },
-//                             privacyTrackingState: "CAN_NOT_TRACK",
-//                             debugContext: {
-//                                 abacusOverrides: [],
-//                                 alterMode: "RELEASED",
-//                             },
-//                         },
-//                         propertyId: "55562987",
-//                         searchCriteria: {
-//                             primary: {
-//                                 dateRange: null,
-//                                 rooms: [
-//                                     {
-//                                         adults: 2,
-//                                     },
-//                                 ],
-//                                 destination: {
-//                                     regionId: "6050610",
-//                                 },
-//                             },
-//                             secondary: {
-//                                 booleans: [
-//                                     {
-//                                         id: "includeRecentReviews",
-//                                         value: true,
-//                                     },
-//                                     {
-//                                         id: "includeRatingsOnlyReviews",
-//                                         value: true,
-//                                     },
-//                                     {
-//                                         id: "overrideEmbargoForIndividualReviews",
-//                                         value: true,
-//                                     },
-//                                     {
-//                                         id: "isFilteredSummary",
-//                                         value: true,
-//                                     },
-//                                 ],
-//                                 counts: [
-//                                     {
-//                                         id: "startIndex",
-//                                         value: 0,
-//                                     },
-//                                     {
-//                                         id: "size",
-//                                         value: 100,
-//                                     },
-//                                 ],
-//                                 selections: [
-//                                     {
-//                                         id: "sortBy",
-//                                         value: "NEWEST_TO_OLDEST_BY_LANGUAGE",
-//                                     },
-//                                     {
-//                                         id: "searchTerm",
-//                                         value: "",
-//                                     },
-//                                 ],
-//                             },
-//                         },
-//                     },
-//                     extensions: {
-//                         persistedQuery: {
-//                             version: 1,
-//                             sha256Hash: "b6755caee5a1fc2bdb97929eb15a2fcff6c365711a3ed8cb11a75c97ec4338b5",
-//                         },
-//                     },
-//                 },
-//             ]),
-//         }).then((response) => response.json());
+        for (const review of data[0].data.propertyInfo.reviewInfo.reviews) {
+            const text = review.text.replace(/\n/g, " ").replace(/\s+/g, " ");
+            results.push({
+                time: parseLongGermanDate(review.submissionTime.longDateFormat),
+                text: text,
+                relativeTimeDescription: "",
+                rating: parseFloat(review.reviewScoreWithDescription.value.split("/")[0]),
+                authorName: review.reviewAuthorAttribution.text,
+                keywords: await getKeywords(text),
+                source: "fewo-direct" as const,
+            });
+        }
 
-//         console.log(JSON.stringify(result));
-
-//         Cache.store<Review[]>(results, "fewo-direct");
-//         resolve(results);
-//     });
-// }
+        Cache.store<Review[]>(results, "fewo-direct");
+        resolve(results);
+    });
+}

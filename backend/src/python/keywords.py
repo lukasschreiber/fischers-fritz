@@ -171,7 +171,7 @@ def expand_keywords(doc: Doc, keywords: list[Keyword]) -> list[Keyword]:
 
         # working with a context of three characters to the left
         look_behind = 3
-        start_of_span = doc[end_token.i - look_behind] if end_token.i - look_behind > 0 else None
+        start_of_span = doc[start_token.i - look_behind] if start_token.i - look_behind > 0 else None
         if start_of_span:
             previous_span = doc.char_span(start_of_span.idx, keyword.start_char - 1)
             if previous_span is not None:

@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { Review, ReviewResponseType, SortOption } from "@fischers-fritz/types";
-import { getFeWoReviews, getGoogleReviews } from "./reviews";
+import { getFeWoDirectReviews, getFeWoReviews, getGoogleReviews } from "./reviews";
 import * as Cache from "./utils/cache";
 import cron from "node-cron";
 
@@ -23,7 +23,7 @@ app.get("/reviews", async (req, res) => {
           : b.rating - a.rating,
       date_desc: (a, b) => b.time - a.time,
     };
-  const reviews = [...(await getFeWoReviews()), ...(await getGoogleReviews())];
+  const reviews = [...(await getFeWoReviews()), ...(await getGoogleReviews()), ...(await getFeWoDirectReviews())];
 
   res.json({
     result: reviews.sort(sortingFunctions[sort]),
@@ -38,4 +38,5 @@ cron.schedule("0 1 * * *", async () => {
   Cache.clear();
   await getFeWoReviews();
   await getGoogleReviews();
+  await getFeWoDirectReviews();
 });
