@@ -1,6 +1,5 @@
+import { ReviewSource } from "@fischers-fritz/types";
 import fs from "fs";
-
-type Namespaces = "google" | "fewo";
 
 const CACHE_DIR = "./cache";
 
@@ -14,20 +13,20 @@ export function init() {
   createCacheDir();
 }
 
-export function store<T>(entry: T, namespace: Namespaces): void {
+export function store<T>(entry: T, namespace: ReviewSource): void {
   fs.writeFileSync(`${CACHE_DIR}/${namespace}.json`, JSON.stringify(entry), {
     encoding: "utf-8",
     flag: "w",
   });
 }
 
-export function get<T>(namespace: Namespaces): T | undefined {
+export function get<T>(namespace: ReviewSource): T | undefined {
   const path = `${CACHE_DIR}/${namespace}.json`;
   if (!fs.existsSync(path)) return undefined;
   return JSON.parse(fs.readFileSync(path, "utf-8")) as T;
 }
 
-export function has(namespace: Namespaces): boolean {
+export function has(namespace: ReviewSource): boolean {
   const path = `${CACHE_DIR}/${namespace}.json`;
   return fs.existsSync(path);
 }

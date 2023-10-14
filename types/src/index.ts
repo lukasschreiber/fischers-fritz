@@ -1,41 +1,43 @@
 export interface GoogleReview {
-    author_name: string,
-    author_url: string,
-    profile_photo_url: string,
-    rating: number,
-    relative_time_description: string,
-    text: string,
-    time: number
-} 
+    author_name: string;
+    author_url: string;
+    profile_photo_url: string;
+    rating: number;
+    relative_time_description: string;
+    text: string;
+    time: number;
+}
 
 export interface Keyword {
     n: number;
     text: string;
     bounds: [number, number];
-  }
+}
+
+export type ReviewSource = "google" | "greetsiel-apartments" | "fewo-direct";
 
 export interface Review {
-    time: number,
-    relativeTimeDescription: string,
-    profileImage?: string,
-    rating: number,
-    title?: string,
-    text: string,
-    authorName: string,
-    details?: ReviewDetail[],
-    keywords: Keyword[],
-    source: "google" | "greetsiel-apartments"
+    time: number;
+    relativeTimeDescription: string;
+    profileImage?: string;
+    rating: number;
+    title?: string;
+    text: string;
+    authorName: string;
+    details?: ReviewDetail[];
+    keywords: Keyword[];
+    source: ReviewSource;
 }
 
 export interface ReviewDetail {
-    label: string,
-    rating: number
+    label: string;
+    rating: number;
 }
 
 export type SortOption = "rating_and_length_desc" | "date_desc";
 
 export interface ReviewRequest {
-    sort: SortOption
+    sort: SortOption;
 }
 
 export interface ReviewResponseType {
@@ -44,11 +46,11 @@ export interface ReviewResponseType {
 
 export interface GoogleReviewResponseType {
     result: {
-        reviews: GoogleReview[]
+        reviews: GoogleReview[];
     };
 }
 
 export interface Image {
-    src: string,
-    title: string
+    src: string;
+    title: string;
 }
