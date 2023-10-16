@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { Review, ReviewResponseType, SortOption } from "@fischers-fritz/types";
-import { getFeWoDirectReviews, getFeWoReviews, getGoogleReviews } from "./reviews";
-import * as Cache from "./utils/cache";
+import { getFeWoDirectReviews, getFeWoReviews, getGoogleReviews } from "./reviews.js";
+import * as Cache from "./utils/cache.js";
 import cron from "node-cron";
 
 dotenv.config();

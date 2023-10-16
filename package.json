@@ -1,5 +1,5 @@
 {
-  "name": "@fischers-fritz/types",
+  "name": "fischers-fritz",
   "workspaces": [
     "frontend",
     "backend",

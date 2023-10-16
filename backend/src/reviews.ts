@@ -1,8 +1,8 @@
 import { GoogleReviewResponseType, Keyword, Review, ReviewDetail } from "@fischers-fritz/types";
-import * as Cache from "./utils/cache";
+import * as Cache from "./utils/cache.js";
 import { JSDOM } from "jsdom";
-import { parseGermanDate, parseLongGermanDate } from "./utils/utils";
-import { getKeywords } from "./python/keywords";
+import { parseGermanDate, parseLongGermanDate } from "./utils/utils.js";
+import { getKeywords } from "./python/keywords.js";
 
 export async function getGoogleReviews(): Promise<Review[]> {
     return new Promise<Review[]>(async (resolve) => {
