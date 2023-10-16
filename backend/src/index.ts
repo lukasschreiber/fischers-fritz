@@ -40,3 +40,9 @@ cron.schedule("0 1 * * *", async () => {
   await getGoogleReviews();
   await getFeWoDirectReviews();
 });
+
+(async () => {
+  await getFeWoReviews();
+  await getGoogleReviews();
+  await getFeWoDirectReviews();
+})()
