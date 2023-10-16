@@ -10,7 +10,7 @@ let timeout: NodeJS.Timeout;
 
 function createPythonProcess() {
   python = spawn(process.env.PYTHON_NAME ?? "python", ["src/python/keyword_interface.py"]);
-  python?.stdout.setEncoding("latin1");
+  python?.stdout.setEncoding(process.env.PYTHON_ENCODING as BufferEncoding ?? "utf-8");
   timeout = setTimeout(() => {
     python?.kill();
     python = undefined;
@@ -25,7 +25,7 @@ export async function getKeywords(text: string): Promise<Keyword[]> {
     timeout.refresh();
 
     python.stdin.write(Buffer.from(id.toString() + EOL));
-    python.stdin.write(Buffer.from(text + EOL, "latin1"));
+    python.stdin.write(Buffer.from(text + EOL, process.env.PYTHON_ENCODING as BufferEncoding ?? "utf-8"));
 
     const dataListener = (data: Buffer) => {
       try {
