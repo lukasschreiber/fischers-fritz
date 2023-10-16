@@ -31,6 +31,7 @@ export async function getKeywords(text: string): Promise<Keyword[]> {
       try {
         const result = JSON.parse(data.toString());
         if(parseInt(result[0]) === id){
+          python?.stdout.removeListener("data", dataListener);
           resolve(
             result[1].map((keyword: [string, number, [number, number]]) => ({
               text: keyword[0],
@@ -42,8 +43,6 @@ export async function getKeywords(text: string): Promise<Keyword[]> {
       } catch (e) {
         resolve([]);
       }
-
-      python?.stdout.removeListener("data", dataListener);
     }
 
     python.stdout.on("data", dataListener);

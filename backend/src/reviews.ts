@@ -16,11 +16,12 @@ export async function getGoogleReviews(): Promise<Review[]> {
         const reviews = await Promise.all(
             data.result.reviews.map(async (review) => {
                 const text = review.text.replace(/\n/g, " ").replace("  ", " ");
+                const keywords: Keyword[] = await getKeywords(text)
                 return {
                     authorName: review.author_name,
                     rating: review.rating,
-                    text: text,
-                    keywords: await getKeywords(text),
+                    text,
+                    keywords,
                     time: review.time,
                     profileImage: review.profile_photo_url,
                     relativeTimeDescription: review.relative_time_description,
