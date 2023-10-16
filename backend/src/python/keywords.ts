@@ -12,6 +12,10 @@ function createPythonProcess() {
     process?.kill();
     process = undefined;
   }, 30 * 1000);
+
+  process.stderr.on("error", (err) => {
+    console.log(err);
+  })
 }
 
 export async function getKeywords(text: string): Promise<Keyword[]> {
