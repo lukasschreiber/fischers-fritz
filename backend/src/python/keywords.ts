@@ -1,28 +1,31 @@
 import { Keyword } from "@fischers-fritz/types";
 import { ChildProcessWithoutNullStreams, spawn } from "child_process";
 import { EOL } from "os";
+import dotenv from "dotenv";
 
-let process: ChildProcessWithoutNullStreams | undefined = undefined;
+dotenv.config();
+
+let python: ChildProcessWithoutNullStreams | undefined = undefined;
 let timeout: NodeJS.Timeout;
 
 function createPythonProcess() {
-  process = spawn("python", ["src/python/keyword_interface.py"]);
-  process.stdout.setEncoding("latin1");
+  python = spawn(process.env.PYTHON_NAME ?? "python", ["src/python/keyword_interface.py"]);
+  python?.stdout.setEncoding("latin1");
   timeout = setTimeout(() => {
-    process?.kill();
-    process = undefined;
+    python?.kill();
+    python = undefined;
   }, 30 * 1000);
 }
 
 export async function getKeywords(text: string): Promise<Keyword[]> {
   const id = Math.floor(Math.random() * Date.now());
   return new Promise<Keyword[]>((resolve) => {
-    if (process === undefined || process.exitCode !== null) createPythonProcess();
-    if (process === undefined) return;
+    if (python === undefined || python.exitCode !== null) createPythonProcess();
+    if (python === undefined) return;
     timeout.refresh();
 
-    process.stdin.write(Buffer.from(id.toString() + EOL));
-    process.stdin.write(Buffer.from(text + EOL, "latin1"));
+    python.stdin.write(Buffer.from(id.toString() + EOL));
+    python.stdin.write(Buffer.from(text + EOL, "latin1"));
 
     const dataListener = (data: Buffer) => {
       try {
@@ -40,9 +43,9 @@ export async function getKeywords(text: string): Promise<Keyword[]> {
         resolve([]);
       }
 
-      process?.stdout.removeListener("data", dataListener);
+      python?.stdout.removeListener("data", dataListener);
     }
 
-    process.stdout.on("data", dataListener);
+    python.stdout.on("data", dataListener);
   });
 }
