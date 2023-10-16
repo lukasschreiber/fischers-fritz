@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon --experimental-specifier-resolution=node src/index.ts",
-    "build": "tsc && cp ./src/python/keywords.py ./dist/python/keywords.py && cp ./src/python/keyword_interface.py ./dist/python/keyword_interface.py"
+    "build": "tsc && cp ./src/python/keywords.py ./dist/python/keywords.py && cp ./src/python/keyword_interface.py ./dist/python/keyword_interface.py",
+    "build:win": "tsc && copy .\\src\\python\\keywords.py .\\dist\\python\\keywords.py && copy .\\src\\python\\keyword_interface.py .\\dist\\python\\keyword_interface.py"
   },
   "author": "",
   "license": "ISC",
