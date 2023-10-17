@@ -3,6 +3,7 @@ import * as Cache from "./utils/cache.js";
 import { JSDOM } from "jsdom";
 import { parseGermanDate, parseLongGermanDate } from "./utils/utils.js";
 import { getKeywords } from "./python/keywords.js";
+import fetch from "node-fetch";
 
 export async function getGoogleReviews(): Promise<Review[]> {
     return new Promise<Review[]>(async (resolve) => {
