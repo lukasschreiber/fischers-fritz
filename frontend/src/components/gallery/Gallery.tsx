@@ -89,7 +89,7 @@ export function Gallery() {
         {images.map((image, index) => (
           <SwiperSlide
             key={image.src + index}
-            className="py-20 px-40 flex justify-center flex-col gap-4 items-center"
+            className="py-20 px-4 md:px-40 flex justify-center flex-col gap-4 items-center"
           >
             <img src={image.src} className="max-h-full" />
             <div className="bg-white px-8 py-2 w-fit rounded-2xl shadow-md">
