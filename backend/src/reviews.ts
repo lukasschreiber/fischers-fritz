@@ -54,9 +54,9 @@ export async function getFeWoReviews(): Promise<Review[]> {
             })
                 .then((body) => body.json())
                 .catch((e: unknown) => console.log(e))) as {
-                votings: string[];
-                more: boolean;
-            };
+                    votings: string[];
+                    more: boolean;
+                };
 
             const dom = new JSDOM(data.votings[0]);
             const getElement = (className: string, fallback: string = "") =>
@@ -80,10 +80,10 @@ export async function getFeWoReviews(): Promise<Review[]> {
                 source: "greetsiel-apartments",
                 details: Array.from(dom.window.document.querySelectorAll(".fewo_voting_scoredetails > div")).map(
                     (element) =>
-                        ({
-                            label: element.querySelector(".voteoption_label")?.textContent,
-                            rating: parseInt(element.querySelector(".voteoption_value")?.textContent ?? "0"),
-                        } as ReviewDetail)
+                    ({
+                        label: element.querySelector(".voteoption_label")?.textContent,
+                        rating: parseInt(element.querySelector(".voteoption_value")?.textContent ?? "0"),
+                    } as ReviewDetail)
                 ),
             });
 
@@ -197,7 +197,7 @@ export async function getFeWoDirectReviews(): Promise<Review[]> {
                     },
                 },
             ]),
-        }).then((response) => response.json())) as {
+        }).then(async (response) => { try { return await response.json() } catch (e) { return ([{ data: { propertyInfo: { reviewInfo: {reviews: []} } } }]) } })) as {
             data: {
                 propertyInfo: {
                     reviewInfo: {
