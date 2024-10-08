@@ -1,5 +1,6 @@
 from typing import List, Optional, Literal, Tuple
 from pydantic import BaseModel
+from spacy.tokens import Span
 
 class GoogleReview(BaseModel):
     author_name: str
@@ -10,12 +11,25 @@ class GoogleReview(BaseModel):
     text: str
     time: int
 
-class Keyword(BaseModel):
+class KeywordModel(BaseModel):
     n: int
     text: str
     bounds: Tuple[int, int]
 
 ReviewSource = Literal["google", "greetsiel-apartments", "fewo-direct"]
+
+#YakeKeyword = Tuple[str, float]
+
+class YakeKeyword(BaseModel):
+    text: str
+    score: float    
+
+class Keyword(BaseModel):
+    span: Span
+    score: float
+    
+    class Config:
+        arbitrary_types_allowed = True
 
 class ReviewDetail(BaseModel):
     label: str
@@ -23,24 +37,26 @@ class ReviewDetail(BaseModel):
 
 class Review(BaseModel):
     time: int
-    relative_time_description: str
-    profile_image: Optional[str] = None
-    rating: int
+    relativeTimeDescription: str
+    profileImage: Optional[str] = None
+    rating: float
     title: Optional[str] = None
     text: str
-    author_name: str
+    authorName: str
     details: Optional[List[ReviewDetail]] = None
-    keywords: List[Keyword]
+    keywords: List[KeywordModel]
     source: ReviewSource
 
-class ReviewRequest(BaseModel):
-    sort: Literal["rating_and_length_desc", "date_desc"]
+SortOptions = Literal["rating_and_length_desc", "date_desc"]
 
 class ReviewResponseType(BaseModel):
     result: List[Review]
+    
+class GoogleReviews(BaseModel):
+    reviews: List[GoogleReview]
 
 class GoogleReviewResponseType(BaseModel):
-    reviews: List[GoogleReview]
+    result: GoogleReviews
 
 class Image(BaseModel):
     src: str
