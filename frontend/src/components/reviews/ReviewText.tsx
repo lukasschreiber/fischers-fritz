@@ -1,4 +1,4 @@
-import { Review } from "@fischers-fritz/types";
+import { Review } from "../../types";
 
 export function ReviewText(props: { review: Review; maxLength?: number }) {
   const maxLength = props.maxLength || Number.MAX_VALUE;

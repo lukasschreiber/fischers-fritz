@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Review, ReviewResponseType, SortOption } from "@fischers-fritz/types";
+import { Review, ReviewResponseType, SortOption } from "../../types";
 import { Stars } from "./Stars";
 // import { ReviewGallery } from "./ReviewGallery";
 import { ReviewGrid } from "./ReviewsGrid";

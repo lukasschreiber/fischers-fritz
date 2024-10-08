@@ -1,4 +1,4 @@
-import { Review } from "@fischers-fritz/types";
+import { Review } from "../../types";
 import { ReviewHeader } from "./ReviewHeader";
 import { ReviewText } from "./ReviewText";
 

@@ -1,4 +1,4 @@
-import { Review } from "@fischers-fritz/types";
+import { Review } from "../../types";
 import { ApartmentsGreetsielLogo, FewoDirectLogo, GoogleLogo, Star } from "../../assets";
 import { Stars } from "./Stars";
 

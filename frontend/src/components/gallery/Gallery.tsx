@@ -1,4 +1,4 @@
-import { Image } from "@fischers-fritz/types";
+import { Image } from "../../types";
 import { createContext, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useGalleryContext } from "../../hooks/gallery";

@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { ReviewCard } from "./ReviewCard";
 import { Pagination } from "swiper/modules";
-import { Review } from "@fischers-fritz/types";
+import { Review } from "../../types";
 import "swiper/css";
 import "swiper/css/pagination";
 

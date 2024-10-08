@@ -1,4 +1,4 @@
-import { Review } from "@fischers-fritz/types";
+import { Review } from "../../types";
 import "swiper/css";
 import "swiper/css/pagination";
 import { ReviewCard } from "./ReviewCard";

@@ -6,8 +6,8 @@
     "types"
   ],
   "scripts": {
-    "dev:host": "concurrently --kill-others \"npm run dev -w frontend -- --host\" \"npm run dev -w backend\" \"npm run dev -w types\"",
-    "dev": "concurrently --kill-others \"npm run dev -w frontend\" \"npm run dev -w backend\" \"npm run dev -w types\""
+    "dev:backend": "cd backend && .\\venv\\Scripts\\activate && uvicorn main:app --reload --port 3000",
+    "dev": "npm run dev -w frontend"
   },
   "devDependencies": {
     "concurrently": "^8.2.1"
