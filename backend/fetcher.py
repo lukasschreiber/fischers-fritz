@@ -2,11 +2,18 @@ from typing import List
 from classes import Review, GoogleReviewResponseType, ReviewDetail
 from utils.cache import cache_get, cache_store
 from utils.keywords import get_keywords
+from utils.gpt_keywords import get_keywords as get_gpt_keywords
 import httpx
 from utils.dates import parse_date
 from bs4 import BeautifulSoup
 import re
 import os
+import json
+
+titles = {}
+
+with open("data/titles.json", "r", encoding="utf-8") as f:
+    titles = json.load(f)
 
 async def get_google_reviews() -> List[Review]:
     cache_entry = cache_get("google")
@@ -25,18 +32,21 @@ async def get_google_reviews() -> List[Review]:
     reviews: List[Review] = []
     for review in data.result.reviews:
         text = review.text.replace("\n", " ").replace("  ", " ")
-        keywords = get_keywords(text)
         
-        reviews.append(Review(
+        review = Review(
             authorName=review.author_name,
             rating=review.rating,
             text=text,
-            keywords=keywords,
+            keywords=[],
             time=review.time,
             profileImage=review.profile_photo_url,
             relativeTimeDescription=review.relative_time_description,
             source="google"
-        ))
+        )
+        
+        review.keywords = get_gpt_keywords(review)
+        
+        reviews.append(review)
 
     cache_store("google", reviews)
     return reviews
@@ -66,22 +76,30 @@ async def get_greetsiel_apartments_reviews() -> List[Review]:
             label = rating.get("data-original-title")
             if label:  # Proceed only if the attribute exists
                 details.append(ReviewDetail(label=label, rating=int(rating.text.strip())))
-        
-        reviews.append(Review(
+                
+        review = Review(
             authorName=review.select_one(".authot-bl").text,
             rating=float(re.search(r'\{\{getFormatedRating\((\d+(?:\.\d+)?)\)\}\}', review.select_one(".feedback-rating-header .tooltip-bl").text).group(1)),
-            # TODO: use the backup title which has to be taken from an old snapshot
             title=review.select_one(".feedback-comment-header .title").text,
             text=text_element.text if text_element is not None else "",
-            keywords=get_keywords(text_element.text) if text_element is not None else [],
+            keywords=[],
             time=parse_date(review.select_one(".feedback-caption .author").text),
             source="greetsiel-apartments",
             relativeTimeDescription="",
             details=details
-        ))
+        )
+        
+        if review.title == "":
+            review.title = titles.get(review.id, "")
+        
+        if review.text != "":
+            review.keywords = get_gpt_keywords(review)
+        
+        reviews.append(review)
         
     cache_store("greetsiel-apartments", reviews)
     return reviews
     
     
 # https://www.traum-ferienwohnungen.de/297743/
+# scrape the titles once

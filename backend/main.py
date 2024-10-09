@@ -2,11 +2,12 @@ from fastapi import FastAPI, Query
 from typing import Optional
 from classes import ReviewResponseType, SortOptions
 from dotenv import load_dotenv
+
+load_dotenv()
+
 from fetcher import get_google_reviews, get_greetsiel_apartments_reviews
 from utils.cache import init_cache
 from fastapi.middleware.cors import CORSMiddleware
-
-load_dotenv()
 
 app: FastAPI = FastAPI()
 

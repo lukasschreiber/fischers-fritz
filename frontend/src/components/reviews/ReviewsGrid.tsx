@@ -62,7 +62,7 @@ export function ReviewGrid(props: { reviews: Review[] }) {
           );
         })}
       </div>
-      <div className="mt-4 text-xs text-neutral-400">We are highlighting the most important phrases reusing an unsupervised state of the art approach developed by Campos et al. and applying custom post processing logic, which can however lead to bias in the results. If you wish to learn more, checkout the paper <a target="_blank" href="https://www.sciencedirect.com/science/article/abs/pii/S0020025519308588?via%3Dihub" className="text-fritz-teal-300">here</a>.</div>
+      {/* <div className="mt-4 text-xs text-neutral-400">We are highlighting the most important phrases reusing an unsupervised state of the art approach developed by Campos et al. and applying custom post processing logic, which can however lead to bias in the results. If you wish to learn more, checkout the paper <a target="_blank" href="https://www.sciencedirect.com/science/article/abs/pii/S0020025519308588?via%3Dihub" className="text-fritz-teal-300">here</a>.</div> */}
     </>
   );
 }
