@@ -50,6 +50,7 @@ export function Reviews() {
           </div>
         ))}
       </div> */}
+      <div className="text-sm text-gray-400 py-4">Wir zeigen hier alle Bewertungen aus unterschiedlichen vertrauenswürdigen Quellen an. Die Bewertungen werden nicht überprüft. Die jeweilige Gesamtbewertung kann sich je nach Quelle aus unterschiedlichen Einzelnoten zusammensetzen.</div>
             <ReviewGrid reviews={reviews} />
         </div>
     );

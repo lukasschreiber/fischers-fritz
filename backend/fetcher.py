@@ -71,8 +71,9 @@ async def get_greetsiel_apartments_reviews() -> List[Review]:
         
         details = []
         for rating in review.select(".feedback-comment-header .ratings .rating"):
+            print(rating)
             # Use .get() to safely access the attribute
-            label = rating.get("data-original-title")
+            label = rating.select_one(".tooltip-bl").get("title")
             if label:  # Proceed only if the attribute exists
                 details.append(ReviewDetail(label=label, rating=int(rating.text.strip())))
                 
@@ -120,6 +121,13 @@ async def get_traum_ferienwohnungen_reviews() -> List[Review]:
     
     for review in review_elements:        
         text_element = review.select_one(".rating__text")
+        
+        details = []
+        for rating in review.select(".rating-score li"):
+            label = rating.get("data-tooltip")
+            if label == "Durchschnittsbewertung":
+                continue
+            details.append(ReviewDetail(label=label, rating=int(rating.select_one(".rating-score__value").text)))
                 
         review = Review(
             authorName=review.select_one("p[data-key=reviewer]").text.replace("Von ", ""),
@@ -130,6 +138,7 @@ async def get_traum_ferienwohnungen_reviews() -> List[Review]:
             time=parse_german_date(review.select_one(".rating__travel-date").text),
             source="traum-ferienwohnungen",
             relativeTimeDescription="",
+            details=details
         )
         
         if review.title == "":

@@ -6,6 +6,7 @@ import { useState } from "react";
 
 export function ReviewHeader(props: { review: Review; starStyle: "small" | "normal" }) {
     const [popupOpen, setPopupOpen] = useState(false);
+    const [ratingPopupOpen, setRatingPopupOpen] = useState(false);
     return (
         <>
             <div className="flex flex-row justify-between gap-2 items-center">
@@ -82,17 +83,40 @@ export function ReviewHeader(props: { review: Review; starStyle: "small" | "norm
                         </div>
                     </div>
                 </div>
-                {props.starStyle === "small" ? (
-                    <div className="bg-yellow-300 text-yellow-700 font-bold p-1 rounded-md flex items-center gap-1 h-fit ml-auto">
-                        <Star className="h-4 w-4" />
-                        {props.review.rating}
-                    </div>
-                ) : (
-                    <div className="ml-auto flex flex-col text-xs text-neutral-400 gap-1">
-                        <Stars max={5} mean={props.review.rating} />
-                        <div>{props.review.rating} Sterne</div>
-                    </div>
-                )}
+                <div
+                    className="relative"
+                    onMouseEnter={() => setRatingPopupOpen(true)}
+                    onMouseLeave={() => setRatingPopupOpen(false)}
+                >
+                    {props.starStyle === "small" ? (
+                        <div className="bg-yellow-300 text-yellow-700 font-bold p-1 rounded-md flex items-center gap-1 h-fit ml-auto">
+                            <Star className="h-4 w-4" />
+                            {props.review.rating}
+                        </div>
+                    ) : (
+                        <div className="ml-auto flex flex-col text-xs text-neutral-400 gap-1">
+                            <Stars max={5} mean={props.review.rating} />
+                            <div>{props.review.rating} Sterne</div>
+                        </div>
+                    )}
+                    {props.review.details && props.review.details.length > 0 && (
+                        <Popup open={ratingPopupOpen} onClose={() => setRatingPopupOpen(false)}>
+                            <div className="flex flex-col gap-1 items-start p-2">
+                                {props.review.details?.map((detail) => {
+                                    return (
+                                        <div key={detail.label} className="flex flex-col gap-1 items-start text-sm">
+                                            <div>{detail.label}:</div>
+                                            <div className="flex flex-row gap-1 items-center text-gray-400 text-xs">
+                                                <Stars max={5} mean={detail.rating} />
+                                                {detail.rating}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </Popup>
+                    )}
+                </div>
             </div>
         </>
     );
