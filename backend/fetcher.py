@@ -1,10 +1,9 @@
 from typing import List
 from classes import Review, GoogleReviewResponseType, ReviewDetail
 from utils.cache import cache_get, cache_store
-from utils.keywords import get_keywords
 from utils.gpt_keywords import get_keywords as get_gpt_keywords
 import httpx
-from utils.dates import parse_date
+from utils.dates import parse_date, parse_german_date
 from bs4 import BeautifulSoup
 import re
 import os
@@ -102,4 +101,44 @@ async def get_greetsiel_apartments_reviews() -> List[Review]:
     
     
 # https://www.traum-ferienwohnungen.de/297743/
-# scrape the titles once
+
+async def get_traum_ferienwohnungen_reviews() -> List[Review]:
+    cache_entry = cache_get("traum-ferienwohnungen")
+    if cache_entry is not None:
+        return cache_entry
+    
+    reviews: List[Review] = []
+    
+    # we only have the html, so we need to parse it
+    # download the html
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://www.traum-ferienwohnungen.de/297743/")
+        html = response.text
+        
+    soup = BeautifulSoup(html, "lxml")
+    review_elements = soup.select("[data-key=ratingItems] section.rating")
+    
+    for review in review_elements:        
+        text_element = review.select_one(".rating__text")
+                
+        review = Review(
+            authorName=review.select_one("p[data-key=reviewer]").text.replace("Von ", ""),
+            rating=float(review.select_one(".rating-score__value[data-key=avg]").text),
+            title=review.select_one(".rating__heading").text,
+            text=text_element.text if text_element is not None else "",
+            keywords=[],
+            time=parse_german_date(review.select_one(".rating__travel-date").text),
+            source="traum-ferienwohnungen",
+            relativeTimeDescription="",
+        )
+        
+        if review.title == "":
+            review.title = titles.get(review.id, "")
+        
+        if review.text != "":
+            review.keywords = get_gpt_keywords(review)
+        
+        reviews.append(review)
+        
+    cache_store("traum-ferienwohnungen", reviews)
+    return reviews

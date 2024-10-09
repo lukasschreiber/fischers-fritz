@@ -14,7 +14,7 @@ export interface Keyword {
     bounds: [number, number];
 }
 
-export type ReviewSource = "google" | "greetsiel-apartments" | "fewo-direct";
+export type ReviewSource = "google" | "greetsiel-apartments" | "fewo-direct" | "traum-ferienwohnungen";
 
 export interface Review {
     time: number;
@@ -34,7 +34,7 @@ export interface ReviewDetail {
     rating: number;
 }
 
-export type SortOption = "rating_and_length_desc" | "date_desc";
+export type SortOption = "rating_and_length_desc" | "date_desc" | "longest_first" | "shortest_first";
 
 export interface ReviewRequest {
     sort: SortOption;

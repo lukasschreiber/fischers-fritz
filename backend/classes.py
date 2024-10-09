@@ -21,7 +21,7 @@ class KeywordModel(BaseModel):
     bounds: Tuple[int, int]
 
 
-ReviewSource = Literal["google", "greetsiel-apartments", "fewo-direct"]
+ReviewSource = Literal["google", "greetsiel-apartments", "fewo-direct", "traum-ferienwohnungen"]
 
 # YakeKeyword = Tuple[str, float]
 
@@ -77,7 +77,7 @@ class Review(BaseModel):
             self.title = self.title.strip()
 
 
-SortOptions = Literal["rating_and_length_desc", "date_desc"]
+SortOptions = Literal["rating_and_length_desc", "date_desc", "longest_first", "shortest_first"]
 
 
 class ReviewResponseType(BaseModel):

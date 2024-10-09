@@ -1,8 +1,6 @@
 from datetime import datetime
 
 def parse_date(date: str) -> int:
-    # the date we get is like "Mai 2022" or "Juni 2024"
-    # we need to convert this to a timestamp
     month, year = date.split(" ")
     month = month.lower()
     months = {
@@ -21,3 +19,8 @@ def parse_date(date: str) -> int:
     }
     
     return int(datetime(year=int(year), month=months[month], day=1).timestamp())
+
+def parse_german_date(date: str) -> int:
+    day, month, year = date.split(".")
+    
+    return int(datetime(year=int(year), month=int(month), day=int(day)).timestamp())

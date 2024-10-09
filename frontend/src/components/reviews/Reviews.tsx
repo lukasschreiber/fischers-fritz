@@ -35,6 +35,8 @@ export function Reviews() {
                     <select className="outline-0" onChange={(e) => setSort(e.target.value as SortOption)}>
                         <option value="rating_and_length_desc">Beste zuerst</option>
                         <option value="date_desc">Neuste zuerst</option>
+                        <option value="longest_first">Längste zuerst</option>
+                        <option value="shortest_first">Kürzeste zuerst</option>
                     </select>
                 </div>
             </div>
