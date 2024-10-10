@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
       args:
         - VITE_GOOGLE_REVIEW_LINK=https://g.page/r/CVA1IUylv2nFEBM/review
-        - VITE_API_URL=http://localhost:8090
+        - VITE_API_URL=https://backend.fischers-fritz-greetsiel.de
     ports:
       - "8091:80"
     depends_on:
