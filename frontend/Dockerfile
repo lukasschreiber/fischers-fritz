@@ -10,7 +10,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN rm .env
 RUN npm run build
 
 FROM nginx:1.19.6-alpine
