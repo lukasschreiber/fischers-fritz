@@ -1,6 +1,5 @@
 from typing import List, Optional, Literal, Tuple
 from pydantic import BaseModel
-from spacy.tokens import Span
 import hashlib
 import json
 
@@ -22,22 +21,6 @@ class KeywordModel(BaseModel):
 
 
 ReviewSource = Literal["google", "greetsiel-apartments", "fewo-direct", "traum-ferienwohnungen"]
-
-# YakeKeyword = Tuple[str, float]
-
-
-class YakeKeyword(BaseModel):
-    text: str
-    score: float
-
-
-class Keyword(BaseModel):
-    span: Span
-    score: float
-
-    class Config:
-        arbitrary_types_allowed = True
-
 
 class ReviewDetail(BaseModel):
     label: str
