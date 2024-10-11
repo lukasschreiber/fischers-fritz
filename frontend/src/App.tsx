@@ -129,7 +129,7 @@ function App() {
             <Container className="bg-white" data-id="testimonials">
                 <Container.Section className="w-full">
                     <Title>
-                        <div className="flex justify-between gap-2 md:flex-row flex-col">
+                        <div className="flex justify-between gap-2 sm:flex-row flex-col w-full">
                             <div>Bewertungen</div>
                             <a
                                 className="text-sm  shadow-md p-3 rounded-md flex gap-2 items-center border border-neutral-100"
